@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from "react";
 import { FaHeart, FaReply, FaStar } from "react-icons/fa";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";

@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import logo from "../../assets/logo.png";
 import food from "../../assets/cheesecakeRecipe.jpg";
-import { Link } from "react-router-dom";
-import { httpAction } from "../../utils/httpAction"; // ✅ adjust path if needed
-import { apis } from "../../utils/apis"; // ✅ adjust path if needed
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import { UseAuth } from "../../components/common/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../redux/slices/userSlice";
 
 const Login = () => {
-  const { setUser } = UseAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading} = useSelector((state) => state.user);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -23,48 +22,19 @@ const Login = () => {
   };
 
   const loginWithGoogle = () => {
-    window.location.href = "http://localhost:5050/auth/google";
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`; // ✅ or your BASE_URL
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    try {
-      const res = await httpAction({
-        url: apis().loginUser,
-        method: "POST",
-        body: formData,
-      });
-
-      // if (res?.message === "Login successful") {
-      //   localStorage.setItem("accessToken", res.token);
-
-      //   if (res.user) {
-      //     setUser(res.user); // instant context update
-      //     await fetchUser();
-      //   }
-
-      //   toast.success("Login successful!");
-      //   // 👇 Delay navigation slightly to allow context update to propagate
-      //   setTimeout(() => {
-      //     navigate("/");
-      //   }, 100); // 100ms is enough
-      // } 
-      if (res?.message === "Login successful") {
-        localStorage.setItem("accessToken", res.token);
-        localStorage.setItem("user", JSON.stringify(res.user));
-        setUser(res.user); // 🧠 this updates your context
+    dispatch(loginUser(formData))
+      .unwrap()
+      .then(() => {
         toast.success("Login successful!");
-      
-        // ✅ no need to reload
         navigate("/");
-      }else {
-        toast.error(res?.message || "Login failed");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      toast.error(error?.message || "Something went wrong!");
-    }
+      })
+      .catch((errMsg) => toast.error("Login failed: " + errMsg));
   };
 
   return (
@@ -106,18 +76,14 @@ const Login = () => {
                 className="w-full mb-2 px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C46C5F]"
               />
 
-              {/* Forgot Password Link
-              <div className="text-right mb-4">
-                <Link to="/FPass" className="text-sm text-[#C46C5F] hover:underline">
-                  Forgot password?
-                </Link>
-              </div> */}
-
               <button
                 type="submit"
-                className="w-full bg-black text-white font-semibold py-3 rounded-full hover:bg-gray-800 transition"
+                disabled={loading}
+                className={`w-full bg-black text-white font-semibold py-3 rounded-full transition ${
+                  loading ? "opacity-60 cursor-not-allowed" : "hover:bg-gray-800"
+                }`}
               >
-                LOGIN
+                {loading ? "Logging in..." : "LOGIN"}
               </button>
             </form>
 
@@ -130,6 +96,7 @@ const Login = () => {
 
             {/* Login with Google */}
             <button
+              type="button"
               onClick={loginWithGoogle}
               className="w-full flex items-center justify-center border border-gray-300 py-3 rounded-full hover:bg-gray-100 transition"
             >

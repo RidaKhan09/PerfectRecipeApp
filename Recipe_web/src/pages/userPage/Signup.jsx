@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import axios from "axios";
 import logo from "../../assets/logo.png";
 import food from "../../assets/cheesecakeRecipe.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signupUser } from "../../redux/slices/userSlice";
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading } = useSelector((state) => state.user);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,56 +20,34 @@ const Signup = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`${name}: ${value}`); // 🧪 Shows live input in console
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
-  const navigate = useNavigate();
-  const handleSignup = async (e) => {
+
+  const handleSignup = (e) => {
     e.preventDefault();
-  
-    console.log("Form Data Submitted:", formData); // 🧪
-  
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-  
-    try {
-      const res = await axios.post("http://localhost:5050/user/register", {
+
+    dispatch(
+      signupUser({
         name: formData.name,
         email: formData.email,
         password: formData.password,
-      });
-  
-      console.log("Signup Success:", res.data);
-      toast.success("Signup successful! Redirecting to login...");
-  
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      localStorage.setItem("token", res.data.token);
-  
-      setTimeout(() => {
-        navigate("/login"); // 👈 go to login after 1.5 sec
-      }, 1500);
-  
-    } catch (err) {
-      console.error("Signup Error:", err.response?.data || err.message);
-      toast.error("Signup failed: " + (err.response?.data?.message || err.message));
-    }
+      })
+    )
+      .unwrap()
+      .then(() => {
+        toast.success("Signup successful! Redirecting...");
+        setTimeout(() => navigate("/login"), 1500);
+      })
+      .catch((errMsg) => toast.error("Signup failed: " + errMsg));
   };
-  
- // const submitHandler = async(values)=> {
-    //   console.log(values);
-    //   const data={
-    //     url:apis().registerUser,
-    //     method: 'POST',
-    //     body:values
-    //   }
-    //   const result = await httpAction(data)
-    //   console.log(result)
-    // }
 
   return (
     <div className="min-h-screen pt-24 flex items-center justify-center bg-gray-100">
@@ -113,16 +95,19 @@ const Signup = () => {
                 onChange={handleChange}
                 className="w-full mb-6 px-5 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#C46C5F]"
               />
+
               <button
                 type="submit"
-                className="w-full bg-black text-white font-semibold py-3 rounded-full hover:bg-gray-800 transition"
+                className={`w-full bg-black text-white font-semibold py-3 rounded-full transition ${loading ? "opacity-60 cursor-not-allowed" : "hover:bg-gray-800"}`}
+                disabled={loading}
               >
-                SIGN UP
+                {loading ? "Signing up..." : "SIGN UP"}
               </button>
 
               {/* Login with Google */}
               <div className="pt-8">
                 <button
+                  type="button"
                   onClick={() => alert("Google login feature coming soon...")}
                   className="w-full flex items-center justify-center border border-gray-300 py-3 rounded-full hover:bg-gray-100 transition"
                 >

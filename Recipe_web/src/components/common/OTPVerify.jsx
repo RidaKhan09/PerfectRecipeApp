@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import BASE_URL from "../../../src/api/BaseURL"; 
 
 const VerifyOtp = () => {
   const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -37,7 +38,7 @@ const VerifyOtp = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:5050/api/verify-otp", {
+      const response = await fetch(`${BASE_URL}/api/verify-otp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

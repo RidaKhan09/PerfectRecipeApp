@@ -1,19 +1,23 @@
-import { useEffect } from "react";
+/* eslint-disable no-unused-vars */
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { UseAuth } from "./AuthContext";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../redux/slices/userSlice";
+import BASE_URL from "../../../src/api/BaseURL";
 
 const PaymentSuccess = () => {
   const [params] = useSearchParams();
   const navigate = useNavigate();
-  const { setUser } = UseAuth();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
 
   const coins = parseInt(params.get("coins"));
 
   useEffect(() => {
     const updateCoins = async () => {
       try {
-        const response = await fetch("http://localhost:5050/user/buy-coins", {
+        const response = await fetch(`${BASE_URL}/user/buy-coins`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -26,15 +30,16 @@ const PaymentSuccess = () => {
 
         if (result?.success && result?.user) {
           toast.success(`🪙 ${coins} coins added!`);
-          setUser(result.user);
+          dispatch(updateUser(result.user));
           localStorage.setItem("user", JSON.stringify(result.user));
-        } 
+        }
       } catch (err) {
         console.error("Update error:", err);
         toast.error("Something went wrong 💥");
       } finally {
-        // Instantly go to homepage after the whole process
-        navigate("/", { replace: true });
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 2000); // 2 seconds wait
       }
     };
 
@@ -43,9 +48,15 @@ const PaymentSuccess = () => {
     } else {
       navigate("/", { replace: true });
     }
-  }, [coins, setUser, navigate]);
+  }, [coins, dispatch, navigate]);
 
-  return null; // no need to show anything, instantly navigating
+  return (
+    <div className="h-screen flex flex-col items-center justify-center bg-white text-gray-800">
+      <div className="text-2xl font-semibold mb-4 animate-pulse">🎉 Payment Successful!</div>
+      <p className="mb-6 text-lg">Please wait while your coins are being added...</p>
+      <div className="w-10 h-10 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+    </div>
+  );
 };
 
 export default PaymentSuccess;

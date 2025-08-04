@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { UseAuth } from "../../common/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../../../redux/slices/userSlice";
+import BASE_URL from "../../../api/BaseURL";
 
 const RecipeGenerator = () => {
-  const { user, setUser } = UseAuth();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+
   const [preferences, setPreferences] = useState("");
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -14,21 +18,25 @@ const RecipeGenerator = () => {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("accessToken");
+      const token = localStorage.getItem("token"); // redux version uses 'token'
       const res = await axios.post(
-        "http://localhost:5050/api/recipes/generate",
+        `${BASE_URL}/api/recipes/generate`,
         { preferences, userEmail: user.email },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
       );
 
       setRecipe(res.data.recipe);
 
-      // Update frontend user coins after backend deduction
+      // ✅ Update Redux + localStorage
       if (res.data.updatedUser) {
-        setUser(res.data.updatedUser);
+        dispatch(updateUser(res.data.updatedUser));
         localStorage.setItem("user", JSON.stringify(res.data.updatedUser));
       }
-
     } catch (err) {
       alert(err?.response?.data?.message || "Error generating recipe.");
     } finally {

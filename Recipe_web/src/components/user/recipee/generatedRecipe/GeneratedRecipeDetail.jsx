@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import BASE_URL from "../../../../api/BaseURL"; 
+
 import {
   FaCalendarAlt,
   FaUtensils,
@@ -20,7 +22,7 @@ const GeneratedRecipeDetail = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const res = await axios.get(`http://localhost:5050/api/recipes/${id}`);
+        const res = await axios.get(`${BASE_URL}/api/recipes/${id}`);
         setRecipe(res.data);
       } catch (err) {
         console.error("Error fetching recipe detail:", err);

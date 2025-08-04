@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { loadStripe } from "@stripe/stripe-js";
+import BASE_URL from "../../../src/api/BaseURL"; 
 
 const stripePromise = loadStripe("pk_test_51RpkTsCLoAsL2v78saSZGNaFCiK8U6JYJTCHbV8WAvfAKIqaIjDuBorszzOxk2eI3U9tgkLErDcSziaPj9macY18001DFwfWIu");
 
@@ -16,7 +17,7 @@ const BuyCoinsModal = ({ setOpen }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:5050/api/stripe/create-checkout-session", {
+      const res = await fetch(`${BASE_URL}/api/stripe/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

@@ -1,6 +1,7 @@
+import BASE_URL from "../../src/api/BaseURL"; 
 
 export const apis = () => {
-    const local = 'http://localhost:5050/';
+  const local = `${BASE_URL}/`; 
   
     const list = {
       registerUser: `${local}user/register`,  

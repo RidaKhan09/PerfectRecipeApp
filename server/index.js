@@ -15,7 +15,7 @@ const aiRoutes= require('./routes/aiRoutes.js')
 const { get } = require('mongoose');
 const app = express();
 const recipeRoutes = require("./routes/recipeRoutes.js");
-
+const port= process.env.PORT || 5050;
 // Enable CORS for frontend
 app.use(
   cors({

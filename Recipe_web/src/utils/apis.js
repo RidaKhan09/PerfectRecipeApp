@@ -1,6 +1,6 @@
 
 export const apis = () => {
-    const local = 'https://perfectrecipeapp-2.onrender.com';
+    const local = 'http://localhost:5050/';
   
     const list = {
       registerUser: `${local}user/register`,  

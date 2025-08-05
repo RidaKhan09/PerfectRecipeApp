@@ -11,8 +11,7 @@ import Signup from "./pages/userPage/Signup";
 import FPass from "./components/common/FPass"
 import OTPVerify from "./components/common/OTPVerify"
 import UpdatePass from "./components/common/UpdatePass"
-
-import Homepage from './Pages/userPage/Homepage';
+import Homepage from "./pages/userPage/Homepage";
 import Recipes from './pages/userPage/Recipes'
 import BlogPage from './pages/userPage/BlogPage';
 import AboutusPage from './pages/userPage/AboutusPage';

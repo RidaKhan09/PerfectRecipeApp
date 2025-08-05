@@ -1,5 +1,5 @@
 const express = require('express');
-const generateRecipe = require('../controllers/aiController');
+const { generateRecipe, getRecipeBySlug } = require('../controllers/aiController');
 const Recipe = require('../models/Recipe.js');
 const auth = require('../middleware/auth');
 
@@ -42,6 +42,7 @@ router.get('/:id', async (req, res) => {
 });
 
 
+router.get('/slug/:slug', getRecipeBySlug);
 
 
 module.exports = router;

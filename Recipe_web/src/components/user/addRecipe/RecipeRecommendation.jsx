@@ -18,7 +18,7 @@ const RecipeGenerator = () => {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("token"); // redux version uses 'token'
+      const token = localStorage.getItem("token");
       const res = await axios.post(
         `${BASE_URL}/api/recipes/generate`,
         { preferences, userEmail: user.email },
@@ -32,7 +32,6 @@ const RecipeGenerator = () => {
 
       setRecipe(res.data.recipe);
 
-      // ✅ Update Redux + localStorage
       if (res.data.updatedUser) {
         dispatch(updateUser(res.data.updatedUser));
         localStorage.setItem("user", JSON.stringify(res.data.updatedUser));
@@ -45,51 +44,67 @@ const RecipeGenerator = () => {
   };
 
   return (
-    <div className=" max-w-xl mx-auto mt-20 px-4 pb-12">
-      <h1 className="text-2xl font-bold mb-4">AI Recipe Generator</h1>
+    <div className="max-w-3xl mx-auto pt-32 px-4 pb-16 font-sans text-gray-800">
+      <div className="bg-gray-100 shadow-lg rounded-xl p-6">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-[#C46C5F] mb-4 text-center">
+          AI Recipe Generator
+        </h1>
 
-      <p className="mb-2">Available Coins: {user?.coins || 0}</p>
+        <p className="text-center text-sm mb-6">
+          Use your coins to generate a delicious recipe with AI.
+        </p>
 
-      <textarea
-        className="w-full p-3 border rounded-md"
-        placeholder="Enter your preferences e.g. 'vegan, spicy, dinner'"
-        value={preferences}
-        onChange={(e) => setPreferences(e.target.value)}
-      ></textarea>
+        <div className="mb-4 text-right text-sm font-medium text-[#C46C5F]">
+          Available Coins: {user?.coins || 0}
+        </div>
 
-      <button
-        onClick={generateRecipe}
-        className="bg-green-600 text-white px-4 py-2 rounded mt-3"
-        disabled={loading}
-      >
-        {loading ? "Generating..." : "Generate Recipe (100 Coins)"}
-      </button>
+        <textarea
+          className="w-full border border-gray-300 rounded-md p-4 resize-none focus:ring-2 focus:ring-[#C46C5F] focus:outline-none"
+          rows={4}
+          placeholder="Enter preferences like 'vegan, spicy, dinner'..."
+          value={preferences}
+          onChange={(e) => setPreferences(e.target.value)}
+        />
+
+        <button
+          onClick={generateRecipe}
+          disabled={loading}
+          className="mt-4 w-full bg-[#C46C5F] hover:bg-[#b1584e] transition text-white font-semibold py-3 px-6 rounded-md shadow-md disabled:opacity-50"
+        >
+          {loading ? "Generating..." : "Generate Recipe (100 Coins)"}
+        </button>
+      </div>
 
       {recipe && (
-        <div className="mt-6 p-4 border rounded bg-gray-50">
-          <h2 className="text-xl font-bold mb-2">{recipe.title}</h2>
+        <div className="mt-10 bg-white shadow-lg rounded-xl p-6">
+          <h2 className="text-2xl font-bold mb-4 text-[#C46C5F] text-center">{recipe.title}</h2>
+
           {recipe.image && (
             <img
               src={recipe.image}
               alt={recipe.title}
-              className="w-full h-auto mb-4 rounded-md border"
+              className="w-full h-auto mb-6 rounded-lg border"
             />
           )}
-          <div className="mb-4">
-            <h3 className="font-semibold mb-1">Ingredients:</h3>
-            <ul className="list-disc pl-5">
+
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold mb-2">🧂 Ingredients</h3>
+            <ul className="list-disc pl-5 space-y-1 text-gray-700">
               {recipe.ingredients?.length > 0 ? (
-                recipe.ingredients.map((ingredient, index) => (
-                  <li key={index}>{ingredient}</li>
+                recipe.ingredients.map((item, index) => (
+                  <li key={index}>{item}</li>
                 ))
               ) : (
                 <li>No ingredients listed.</li>
               )}
             </ul>
           </div>
+
           <div>
-            <h3 className="font-semibold mb-1">Instructions:</h3>
-            <p>{recipe.instructions || "Instructions not available."}</p>
+            <h3 className="text-lg font-semibold mb-2">👨‍🍳 Instructions</h3>
+            <p className="text-gray-700 leading-relaxed">
+              {recipe.instructions || "Instructions not available."}
+            </p>
           </div>
         </div>
       )}

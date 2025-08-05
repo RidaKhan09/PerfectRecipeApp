@@ -35,6 +35,7 @@ const MyGeneratedRecipes = () => {
             <RecipeCard
               key={recipe._id}
               id={recipe._id}
+              slug={recipe.slug}  // ✅ add this
               title={recipe.title}
               img={recipe.image}
               calories={recipe.calories}

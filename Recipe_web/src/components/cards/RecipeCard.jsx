@@ -10,9 +10,10 @@ const avatarFallback = Men;
 const StarIcon = () => <img src={Star} alt="Star" className="w-4 h-4" />;
 const BookmarkIcon = () => <img src={bookmark} alt="Bookmark" className="w-5 h-5" />;
 
-const RecipeCard = ({ id, title, img, calories }) => {
+// eslint-disable-next-line no-unused-vars
+const RecipeCard = ({ id, title, img, calories,slug }) => {
   return (
-    <Link to={`/generated-recipes/${id}`}>
+    <Link to={`/generated-recipes/${slug}`}>
       <article className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col relative hover:shadow-lg transition">
         {/* Image & Bookmark */}
         <div className="relative">

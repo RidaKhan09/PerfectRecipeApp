@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../../../api/BaseURL"; 
+import PageHeader from '../../../common/PageHeader'; // ✅ path should be correct
 
 import {
   FaCalendarAlt,
@@ -14,7 +15,7 @@ import {
 } from "react-icons/fa";
 
 const GeneratedRecipeDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams(); // only use slug now
   const [recipe, setRecipe] = useState(null);
   const printRef = useRef();
   const brandColor = "#C46C5F";
@@ -22,7 +23,7 @@ const GeneratedRecipeDetail = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/recipes/${id}`);
+        const res = await axios.get(`${BASE_URL}/api/recipes/slug/${slug}`);
         setRecipe(res.data);
       } catch (err) {
         console.error("Error fetching recipe detail:", err);
@@ -30,9 +31,16 @@ const GeneratedRecipeDetail = () => {
     };
 
     fetchRecipe();
-  }, [id]);
+  }, [slug]);
 
-  if (!recipe) return <p className="pt-24 px-4 pb-24">Loading...</p>;
+  if (!recipe) {
+    return (
+      <div className="pt-24 px-4 pb-24 text-center">
+        <p className="text-lg text-black-500">Loading.....</p>
+      </div>
+    );
+  }
+  
 
   const handlePrint = () => {
     const printContents = printRef.current.innerHTML;
@@ -80,10 +88,13 @@ const GeneratedRecipeDetail = () => {
   };
 
   return (
-    <div className="pt-24 px-4 pb-24">
-      <div ref={printRef} className="max-w-3xl mx-auto bg-gray-100 p-6 shadow-md rounded-lg space-y-6">
+    <div>
+      {/* ✅ PageHeader showing recipe title */}
+      <PageHeader title={recipe.title} />
+
+      <div ref={printRef} className="max-w-3xl mx-auto bg-gray-100 p-6 shadow-md rounded-lg space-y-6 mt-8">
         {/* Header */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 pb-12">
           <img
             src={recipe.image}
             alt={recipe.title}
@@ -93,7 +104,7 @@ const GeneratedRecipeDetail = () => {
             <h2 className="text-xl font-semibold text-gray-800">{recipe.title}</h2>
             <div className="flex items-center gap-4 text-sm text-gray-600">
               <span className="flex items-center gap-1" style={{ color: brandColor }}>
-                <FaUtensils /> Author Name
+                <FaUtensils /> {recipe.userEmail?.replace("@gmail.com", "")}
               </span>
               <span className="flex items-center gap-1" style={{ color: brandColor }}>
                 <FaCalendarAlt /> {new Date().toDateString()}

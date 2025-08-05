@@ -48,7 +48,7 @@ function App() {
             <Route path="/UpdatePass" element={<UpdatePass />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/my-generated-recipes" element={<MyGeneratedRecipes />} />
-            <Route path="/generated-recipes/:id" element={<GeneratedRecipeDetail />} />
+            <Route path="/generated-recipes/:slug" element={<GeneratedRecipeDetail />} />
 
             </Routes>
           <Footer />

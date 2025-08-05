@@ -68,7 +68,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`w-full fixed top-0 left-0 z-50 px-4 sm:px-6 lg:px-10 transition-all duration-300 ${
+        className={`absolute w-full fixed top-0 left-0 z-50 px-4 sm:px-6 lg:px-10 transition-all duration-300 ${
           scrolled ? "bg-white shadow-md" : "bg-transparent"
         }`}
       >
@@ -84,11 +84,21 @@ const Navbar = () => {
 
           {/* Nav Links */}
           <ul className="hidden lg:flex items-center space-x-6 font-medium text-black">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/recipes">Recipe</Link></li>
-            <li><Link to="/AddRecipe">Add Recipe</Link></li>
-            <li><Link to="/BlogPage">Blog</Link></li>
-            <li><Link to="/AboutusPage">About</Link></li>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/recipes">Recipe</Link>
+            </li>
+            <li>
+              <Link to="/AddRecipe">Add Recipe</Link>
+            </li>
+            <li>
+              <Link to="/BlogPage">Blog</Link>
+            </li>
+            <li>
+              <Link to="/AboutusPage">About</Link>
+            </li>
           </ul>
 
           {/* Auth */}
@@ -101,7 +111,10 @@ const Navbar = () => {
                   className="flex items-center gap-1 text-yellow-500 font-bold cursor-pointer"
                   title="Buy Coins"
                 >
-                  <FaCoins size={20} className="text-yellow-400 drop-shadow-sm" />
+                  <FaCoins
+                    size={20}
+                    className="text-yellow-400 drop-shadow-sm"
+                  />
                   <span>Coins: {user.coins}</span>
                 </div>
 
@@ -109,7 +122,7 @@ const Navbar = () => {
                 <div className="relative" ref={dropdownRef}>
                   <div
                     onClick={() => setShowDropdown(!showDropdown)}
-                    className="w-8 h-8 bg-pink-700 text-white rounded-full flex items-center justify-center font-bold uppercase cursor-pointer"
+                    className="w-8 h-8 bg-[#C46C5F] text-white rounded-full flex items-center justify-center font-bold uppercase cursor-pointer"
                   >
                     {user?.name?.[0]}
                   </div>
@@ -122,13 +135,13 @@ const Navbar = () => {
                       <div className="text-gray-500">{user.email}</div>
                       <Link
                         to="/my-generated-recipes"
-                        className="block px-3 py-1 text-black hover:bg-gray-100 rounded"
+                        className="block  py-2 text-black hover:bg-gray-100 rounded "
                       >
                         My Generated Recipes
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-3 py-1 text-red-600 hover:bg-red-50 rounded mt-2"
+                        className="w-full px-3 py-1 text-white bg-[#C46C5F] hover:bg-[#b1584e] rounded mt-2 text-center"
                       >
                         Logout
                       </button>

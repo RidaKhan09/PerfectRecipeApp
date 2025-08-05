@@ -1,19 +1,14 @@
 import React from "react";
 import { blogPosts } from "../../../data/index";
-import { brandColor } from "../../../data/index";
 
 const FeaturedBlogCard = () => {
   const featured = blogPosts[0]; // Assuming first blog is featured
 
   return (
     <div className="max-w-5xl mx-auto px-4 pt-24">
-      {/* Breadcrumb */}
-      <nav className="text-sm text-gray-500 mb-1">
-        Home &gt; <span style={{ color: brandColor }}>Blog</span>
-      </nav>
 
       {/* Title */}
-      <h1 className="pt-12 text-3xl font-bold text-gray-900 mb-6">Blog</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-6">Blog</h1>
 
       {/* Featured Blog Card */}
       <section className="bg-white rounded-xl shadow-lg p-6 sm:p-8 mb-12">

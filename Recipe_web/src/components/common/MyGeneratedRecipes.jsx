@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyRecipes } from "../../redux/slices/recipeSlice";
 import RecipeCard from "../cards/RecipeCard";
+import {RecipesPage,RecipesImage,TrendingTags} from '../../data/index'
+import PageHeader from '../../components/common/PageHeader';
 
 const MyGeneratedRecipes = () => {
   const dispatch = useDispatch();
@@ -17,8 +19,9 @@ const MyGeneratedRecipes = () => {
   }, [user, dispatch]);
 
   return (
-    <div className="pt-24 px-4 max-w-6xl mx-auto pb-12">
-      <h1 className="text-2xl font-bold mb-6">My Generated Recipes</h1>
+    <div>
+      <PageHeader title="Generated Recipes" />
+    <div className="pt-12 px-4 max-w-6xl mx-auto pb-12">
 
       {loading ? (
         <p>Loading...</p>
@@ -39,7 +42,7 @@ const MyGeneratedRecipes = () => {
           ))}
         </div>
       )}
-    </div>
+    </div>   </div>
   );
 };
 

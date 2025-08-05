@@ -41,11 +41,7 @@ const MixGreenRecipePage = ({ recipe }) => {
   
   return (
     <article className="lg:col-span-3">
-    <div ref={printRef} className="max-w-4xl mx-auto p-6">
-        {/* Breadcrumb */}
-        <nav className="text-sm text-gray-500 mb-2">
-          Home &gt; <span style={{ color: brandColor }}>Recipe</span> &gt; {recipe.title}
-        </nav>
+    <div ref={printRef} className="max-w-3xl mx-auto">
 
         {/* Title */}
         <h1 className="text-3xl font-bold text-gray-900 mb-2">{recipe.title}</h1>

@@ -3,17 +3,13 @@ import WhoWeAre from "./WhoWeAre";
 import WhatWeDo from "./WhatWeDo";
 import OurCoreValues from "./OurCoreValues";
 import ContactCTA from "./ContactCTA";
-import {brandColor} from "../../../data/index"
 
 const AboutusPageComponent = () => {
   return (
    <>
    <section className="max-w-6xl mx-auto px-4 py-16 text-gray-800">
-  <div className="max-w-5xl mx-auto pt-24">
-    <nav className="text-sm text-gray-500 mb-1">
-      Home &gt; <span style={{ color: brandColor }}>About Us</span>
-    </nav>
-    <h1 className="pt-12 text-3xl font-bold text-gray-900 mb-2">About Us</h1>
+  <div className="max-w-5xl mx-auto ">
+    <h1 className=" text-3xl font-bold text-gray-900 mb-2">About Us</h1>
   </div>
 
   <WhoWeAre />

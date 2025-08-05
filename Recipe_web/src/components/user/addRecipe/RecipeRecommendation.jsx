@@ -45,7 +45,7 @@ const RecipeGenerator = () => {
   };
 
   return (
-    <div className="pt-24 max-w-xl mx-auto mt-20 px-4 pb-12">
+    <div className=" max-w-xl mx-auto mt-20 px-4 pb-12">
       <h1 className="text-2xl font-bold mb-4">AI Recipe Generator</h1>
 
       <p className="mb-2">Available Coins: {user?.coins || 0}</p>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Link } from "react-router-dom";
 import Men from "../../assets/Men.jpg";
@@ -10,11 +11,10 @@ const avatarFallback = Men;
 const StarIcon = () => <img src={Star} alt="Star" className="w-4 h-4" />;
 const BookmarkIcon = () => <img src={bookmark} alt="Bookmark" className="w-5 h-5" />;
 
-// eslint-disable-next-line no-unused-vars
-const RecipeCard = ({ id, title, img, calories,slug }) => {
+const RecipeCard = ({ id, title, img, calories, slug }) => {
   return (
     <Link to={`/generated-recipes/${slug}`}>
-      <article className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col relative hover:shadow-lg transition">
+      <article className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col relative hover:shadow-lg transition h-[380px]">
         {/* Image & Bookmark */}
         <div className="relative">
           <img src={img} alt={title} className="w-full h-48 object-cover" />
@@ -35,9 +35,13 @@ const RecipeCard = ({ id, title, img, calories,slug }) => {
             ))}
           </div>
 
-          <h3 className="text-gray-900 font-medium text-base mb-3 capitalize">{title}</h3>
+          {/* Title - max 2 lines */}
+          <h3 className="text-gray-900 font-medium text-base mb-3 capitalize line-clamp-2">
+            {title}
+          </h3>
 
-          <div className="flex-grow" />
+          {/* Push footer to bottom */}
+          <div className="flex-grow min-h-[20px]" />
 
           {/* Footer */}
           <div className="flex justify-between items-center pt-4 border-t text-sm text-gray-600">
@@ -60,3 +64,4 @@ const RecipeCard = ({ id, title, img, calories,slug }) => {
 };
 
 export default RecipeCard;
+

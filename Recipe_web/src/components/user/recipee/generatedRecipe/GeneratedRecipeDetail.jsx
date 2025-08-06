@@ -91,7 +91,7 @@ const GeneratedRecipeDetail = () => {
     <div>
       {/* ✅ PageHeader showing recipe title */}
       <PageHeader title={recipe.title} />
-
+     <div className="pb-24 px-4 ">
       <div ref={printRef} className="max-w-3xl mx-auto bg-gray-100 p-6 shadow-md rounded-lg space-y-6 mt-8">
         {/* Header */}
         <div className="flex gap-4 pb-12">
@@ -184,7 +184,7 @@ const GeneratedRecipeDetail = () => {
           </ol>
         </div>
       </div>
-    </div>
+    </div>  </div>
   );
 };
 

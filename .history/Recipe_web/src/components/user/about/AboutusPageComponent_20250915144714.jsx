@@ -2,7 +2,7 @@ import React from 'react'
 import WhoWeAre from "./WhoWeAre";
 import WhatWeDo from "./WhatWeDo";
 import OurCoreValues from "./OurCoreValues";
-import ContactCTA from "./ContactCta";
+import ContactCTA from "./ContactCTA";
 
 const AboutusPageComponent = () => {
   return (

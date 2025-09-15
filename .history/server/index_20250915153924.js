@@ -19,7 +19,7 @@ const recipeRoutes = require("./routes/recipeRoutes.js");
 // Enable CORS for frontend
 app.use(
   cors({
-    origin: 'https://your-frontend.vercel.app',
+    origin: 'http://localhost:5173", "http://localhost:5174',
     credentials: true,
   })
 );
@@ -97,7 +97,6 @@ app.use("/api/recipes", recipeRoutes);
 
 getConnection();
 // Start server
-const PORT = process.env.PORT || 5050;
 app.listen(process.env.PORT, () =>
   console.log(`✅ Server is running on port: ${process.env.PORT}`)
 );

@@ -104,7 +104,21 @@ const Signup = () => {
                 {loading ? "Signing up..." : "SIGN UP"}
               </button>
 
-  
+              {/* Login with Google */}
+              <div className="pt-8">
+                <button
+                  type="button"
+                  onClick={() => alert("Google login feature coming soon...")}
+                  className="w-full flex items-center justify-center border border-gray-300 py-3 rounded-full hover:bg-gray-100 transition"
+                >
+                  <img
+                    src="https://www.svgrepo.com/show/475656/google-color.svg"
+                    alt="Google"
+                    className="h-5 w-5 mr-2"
+                  />
+                  <span className="font-medium text-gray-700">Continue With Google</span>
+                </button>
+              </div>
             </form>
           </div>
           <p className="text-xs text-gray-400 mt-6">
